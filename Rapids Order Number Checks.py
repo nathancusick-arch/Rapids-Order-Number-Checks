@@ -3,6 +3,8 @@ import re
 import streamlit as st
 import pandas as pd
 
+abort_email = st.secrets["abort_email"]
+
 st.title("Deliveroo & Uber Eats Order Number Checks")
 
 st.write("Upload a Deliveroo export and an Uber Eats export.")
@@ -97,6 +99,15 @@ if d_file and u_file:
     final=pd.concat([d,u],ignore_index=True)
     final=final.drop(columns=["Platform"])
 
+    upload_df = (
+        pd.DataFrame({
+            "internal_id": final["internal_id"],
+            "status": "approving_query",
+            "report_ABORT_mini": abort_email
+        })
+        .drop_duplicates(subset=["internal_id"])
+    )
+
 	# Preserve leading zeros when opening the CSV in Excel
     final["Order Number"] = final["Order Number"].apply(
         lambda x: f'="{x}"'
@@ -107,6 +118,9 @@ if d_file and u_file:
     csv=io.StringIO()
     final.to_csv(csv,index=False,encoding='utf-8-sig')
 
+	upload_csv = io.StringIO()
+    upload_df.to_csv(upload_csv, index=False)
+
     d_contact=d.loc[d["Fail Criteria"].str.contains("Must be exactly 11 digits",na=False),"internal_id"].tolist()
     u_contact=u.loc[u["Fail Criteria"].str.contains("Must be exactly 5 characters long",na=False),"internal_id"].tolist()
 
@@ -116,5 +130,6 @@ Please see attached for a list of Deliveroo and Uber Eats audits which failed or
 
     st.success(f"{len(final)} invalid audits found.")
     st.download_button("Download Order Number Checks.csv",csv.getvalue(),"Order Number Checks.csv","text/csv")
+    st.download_button("Download audits_upload_template.csv",upload_csv.getvalue(),"audits_upload_template.csv","text/csv")
     st.markdown("#### Email Text")
     st.code(email,language="text")
