@@ -3,7 +3,13 @@ import re
 import streamlit as st
 import pandas as pd
 
-abort_email = st.secrets["abort_email"]
+try:
+    abort_email = st.secrets["abort_email"]
+except KeyError:
+    st.error(
+        "The 'abort_email' secret has not been configured for this application."
+    )
+    st.stop()
 
 st.title("Deliveroo & Uber Eats Order Number Checks")
 
