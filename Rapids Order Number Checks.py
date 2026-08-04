@@ -5,15 +5,16 @@ import pandas as pd
 
 st.title("Deliveroo & Uber Eats Order Number Checks")
 
-st.write("""
-Upload a Deliveroo export and an Uber Eats export.
+st.write("Upload a Deliveroo export and an Uber Eats export.")
 
+st.markdown("""
 The tool will:
-• Filter irrelevant audits
-• Validate order numbers
-• Combine the results
-• Generate Order Number Checks.csv
-• Generate copyable email text
+
+- Filter irrelevant audits
+- Validate order numbers
+- Combine the results
+- Generate **Order Number Checks.csv**
+- Generate copyable email text
 """)
 
 d_file = st.file_uploader("Upload Deliveroo export", type="csv")
