@@ -16,8 +16,8 @@ The tool will:
 • Generate copyable email text
 """)
 
-d_file = st.file_uploader("Upload Deliveroo.csv", type="csv")
-u_file = st.file_uploader("Upload Uber Eats.csv", type="csv")
+d_file = st.file_uploader("Upload Deliveroo export", type="csv")
+u_file = st.file_uploader("Upload Uber Eats export", type="csv")
 
 KEEP = [
     "order_internal_id","internal_id","site_internal_id","site_name",
@@ -96,6 +96,13 @@ if d_file and u_file:
     final=pd.concat([d,u],ignore_index=True)
     final=final.drop(columns=["Platform"])
 
+	# Preserve leading zeros when opening the CSV in Excel
+	final["Order Number"] = final["Order Number"].apply(
+    	lambda x: f'="{x}"'
+    	if isinstance(x, str) and x.startswith("0")
+    	else x
+	)
+
     csv=io.StringIO()
     final.to_csv(csv,index=False,encoding='utf-8-sig')
 
@@ -104,7 +111,7 @@ if d_file and u_file:
 
     email=f"""Hi all,
 
-Please see attached for a list of Deliveroo and Uber Eats audits which failed my order number validations, along with the reasons in column U. To me it looks like there's {len(d_contact)} Deliveroo ({", ".join(d_contact)}) and {len(u_contact)} Uber Eats ({", ".join(u_contact)}) which would require contacting the auditor to get the correct order number, while the rest should be able to be updated in place on the audit. I've moved these audits to approving query and removed the emails so that they can be edited and re-approved as and when they're ready. Please let me know if there's anything else you need."""
+Please see attached for a list of Deliveroo and Uber Eats audits which failed order number validations, along with the reasons in column U. To me it looks like there's {len(d_contact)} Deliveroo ({", ".join(d_contact)}) and {len(u_contact)} Uber Eats ({", ".join(u_contact)}) which would require contacting the auditor to get the correct order number, while the rest should be able to be updated in place on the audit. I've moved these audits to approving query and removed the emails so that they can be edited and re-approved as and when they're ready. Please let me know if there's anything else you need."""
 
     st.success(f"{len(final)} invalid audits found.")
     st.download_button("Download Order Number Checks.csv",csv.getvalue(),"Order Number Checks.csv","text/csv")
