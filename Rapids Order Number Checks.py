@@ -97,11 +97,11 @@ if d_file and u_file:
     final=final.drop(columns=["Platform"])
 
 	# Preserve leading zeros when opening the CSV in Excel
-	final["Order Number"] = final["Order Number"].apply(
-    	lambda x: f'="{x}"'
-    	if isinstance(x, str) and x.startswith("0")
-    	else x
-	)
+    final["Order Number"] = final["Order Number"].apply(
+        lambda x: f'="{x}"'
+        if isinstance(x, str) and x.startswith("0")
+        else x
+    )
 
     csv=io.StringIO()
     final.to_csv(csv,index=False,encoding='utf-8-sig')
