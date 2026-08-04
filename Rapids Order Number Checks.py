@@ -118,8 +118,8 @@ if d_file and u_file:
     csv=io.StringIO()
     final.to_csv(csv,index=False,encoding='utf-8-sig')
 
-	upload_csv = io.StringIO()
-    upload_df.to_csv(upload_csv, index=False)
+    upload_csv=io.StringIO()
+    upload_df.to_csv(upload_csv,index=False)
 
     d_contact=d.loc[d["Fail Criteria"].str.contains("Must be exactly 11 digits",na=False),"internal_id"].tolist()
     u_contact=u.loc[u["Fail Criteria"].str.contains("Must be exactly 5 characters long",na=False),"internal_id"].tolist()
