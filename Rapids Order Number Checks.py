@@ -31,9 +31,10 @@ u_file = st.file_uploader("Upload Uber Eats export", type="csv")
 KEEP = [
     "order_internal_id","internal_id","site_internal_id","site_name",
     "site_address_1","site_address_2","site_address_3","site_post_code",
-    "submitted_date","approval_date","item_to_order","date_of_visit",
-    "time_of_visit","tokens","auditor_name","auditor_internal_id",
-    "auditor_gender","auditor_date_of_birth","visit_info","Order Number"
+    "submitted_date","approval_date","approved_by_name","item_to_order",
+    "date_of_visit","time_of_visit","tokens","auditor_name",
+    "auditor_internal_id","auditor_gender","auditor_date_of_birth",
+    "visit_info","Order Number"
 ]
 
 def prepare(df, order_col):
