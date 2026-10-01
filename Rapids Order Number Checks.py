@@ -91,8 +91,8 @@ if d_file and u_file:
     u=u[u["primary_result"].str.lower()!="abort"]
     u=u[~u["tokens"].str.contains("Tesco Whoosh",case=False,na=False)]
 
-    d=prepare(d,"Please enter the  11-digit order number:")
-    u=prepare(u,"Please enter your order number:")
+    d=prepare(d,"Q372 - Please enter the  11-digit order number:")
+    u=prepare(u,"Q4477 - Please enter your order number:")
 
     d["Platform"]="Deliveroo"
     u["Platform"]="Uber Eats"
