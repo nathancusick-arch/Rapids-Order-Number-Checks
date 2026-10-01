@@ -85,8 +85,11 @@ if d_file and u_file:
     d=pd.read_csv(d_file,dtype=str,keep_default_na=False)
     u=pd.read_csv(u_file,dtype=str,keep_default_na=False)
 
-    d["Please enter the  11-digit order number:"] = d["Q372 - Please enter the  11-digit order number:"]
-    u["Please enter your order number:"] = u["Q4477 - Please enter your order number:"].replace("", pd.NA).combine_first(u["Q368 - Please enter your order number:"].replace("", pd.NA)).fillna("")
+    if "Please enter the  11-digit order number:" not in d.columns:
+		d["Please enter the  11-digit order number:"] = d["Q372 - Please enter the  11-digit order number:"]
+
+    if "Please enter your order number:" not in u.columns:
+		u["Please enter your order number:"] = u["Q4477 - Please enter your order number:"].replace("", pd.NA).combine_first(u["Q368 - Please enter your order number:"].replace("", pd.NA)).fillna("")
 
     d=d[d["primary_result"].str.lower()!="abort"]
     d=d[~d["item_to_order"].isin(["Alcohol","Click & Collect"])]
